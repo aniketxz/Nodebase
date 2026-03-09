@@ -5,10 +5,13 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createTRPCContext } from "@trpc/tanstack-react-query";
 import { useState } from "react";
+import superjson from "superjson";
 import { makeQueryClient } from "./query-client";
 import type { AppRouter } from "./routers/_app";
+
 export const { TRPCProvider, useTRPC } = createTRPCContext<AppRouter>();
 let browserQueryClient: QueryClient;
+
 function getQueryClient() {
 	if (typeof window === "undefined") {
 		// Server: always make a new query client
@@ -21,6 +24,7 @@ function getQueryClient() {
 	if (!browserQueryClient) browserQueryClient = makeQueryClient();
 	return browserQueryClient;
 }
+
 function getUrl() {
 	const base = (() => {
 		if (typeof window !== "undefined") return "";
@@ -29,10 +33,11 @@ function getUrl() {
 	})();
 	return `${base}/api/trpc`;
 }
+
 export function TRPCReactProvider(
 	props: Readonly<{
 		children: React.ReactNode;
-	}>
+	}>,
 ) {
 	// NOTE: Avoid useState when initializing the query client if you don't
 	//       have a suspense boundary between this and the code that may
@@ -43,11 +48,11 @@ export function TRPCReactProvider(
 		createTRPCClient<AppRouter>({
 			links: [
 				httpBatchLink({
-					// transformer: superjson, <-- if you use a data transformer
+					transformer: superjson,
 					url: getUrl(),
 				}),
 			],
-		})
+		}),
 	);
 	return (
 		<QueryClientProvider client={queryClient}>
