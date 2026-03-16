@@ -11,7 +11,8 @@ export const AddNodeButton = memo(() => {
 	return (
 		<NodeSelector open={selectorOpen} onOpenChange={setSelectorOpen}>
 			<Button
-				onClick={() => {}}
+				// onclick handled by SheetTrigger in NodeSelector component
+				// which opens right hand side sheet
 				size="icon"
 				variant="outline"
 				className="bg-background"
