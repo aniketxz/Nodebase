@@ -31,6 +31,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import Image from "next/image";
+import { CredentialType } from "@/generated/prisma";
+import { useCredentialsByType } from "@/features/credentials/hooks/use-credentials";
 
 export const ANTHROPIC_MODELS = [
 	{
@@ -57,6 +60,7 @@ const formSchema = z.object({
 			message:
 				"Variable name must start with a letter or underscore and contain only letters, numbers, and underscores",
 		}),
+	credentialId: z.string().min(1, "Credential is required"),
 	model: z.enum(ANTHROPIC_MODELS.map((m) => m.value)),
 	systemPrompt: z.string().optional(),
 	userPrompt: z.string().min(1, "User prompt is required"),
@@ -77,9 +81,13 @@ export const AnthropicDialog = ({
 	onSubmit,
 	defaultValues = {},
 }: Props) => {
+	const { data: credentials, isLoading: isLoadingCredentials } =
+		useCredentialsByType(CredentialType.ANTHROPIC);
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
+			credentialId: defaultValues.credentialId || "",
 			variableName: defaultValues.variableName || "",
 			model: defaultValues.model || ANTHROPIC_MODELS[0].value,
 			systemPrompt: defaultValues.systemPrompt || "",
@@ -91,6 +99,7 @@ export const AnthropicDialog = ({
 	useEffect(() => {
 		if (open) {
 			form.reset({
+				credentialId: defaultValues.credentialId || "",
 				variableName: defaultValues.variableName || "",
 				model: defaultValues.model || ANTHROPIC_MODELS[0].value,
 				systemPrompt: defaultValues.systemPrompt || "",
@@ -139,6 +148,42 @@ export const AnthropicDialog = ({
 						/>
 						<FormField
 							control={form.control}
+							name="credentialId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Anthropic Credential</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										defaultValue={field.value}
+										disabled={isLoadingCredentials || credentials?.length === 0}
+									>
+										<FormControl>
+											<SelectTrigger className="w-full">
+												<SelectValue placeholder="Select a credential" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{credentials?.map((credential) => (
+												<SelectItem key={credential.id} value={credential.id}>
+													<div className="flex items-center gap-2">
+														<Image
+															src="/logos/anthropic.svg"
+															alt="Anthropic"
+															width={16}
+															height={16}
+														/>
+														{credential.name}
+													</div>
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
 							name="model"
 							render={({ field }) => (
 								<FormItem>
@@ -161,8 +206,7 @@ export const AnthropicDialog = ({
 										</SelectContent>
 									</Select>
 									<FormDescription>
-										The Anthropic model you want to use. Gemini 2.5 models are
-										available in free tier.
+										The Anthropic model you want to use.
 									</FormDescription>
 									<FormMessage />
 								</FormItem>
