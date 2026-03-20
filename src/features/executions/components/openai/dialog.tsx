@@ -24,7 +24,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import Image from "next/image";
+import { useCredentialsByType } from "@/features/credentials/hooks/use-credentials";
+import { CredentialType } from "@/generated/prisma";
 
 export const OPENAI_MODELS = [
 	{ value: "gpt-5.4", label: "GPT-5.4 (Flagship - best reasoning & coding)" },
@@ -48,6 +57,7 @@ const formSchema = z.object({
 			message:
 				"Variable name must start with a letter or underscore and contain only letters, numbers, and underscores",
 		}),
+	credentialId: z.string().min(1, { message: "Credential is required" }),
 	model: z.enum(OPENAI_MODELS.map((m) => m.value)),
 	systemPrompt: z.string().optional(),
 	userPrompt: z.string().min(1, "User prompt is required"),
@@ -68,9 +78,13 @@ export const OpenAiDialog = ({
 	onSubmit,
 	defaultValues = {},
 }: Props) => {
+	const { data: credentials, isLoading: isLoadingCredentials } =
+		useCredentialsByType(CredentialType.OPENAI);
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
+			credentialId: defaultValues.credentialId || "",
 			variableName: defaultValues.variableName || "",
 			model: defaultValues.model || OPENAI_MODELS[0].value,
 			systemPrompt: defaultValues.systemPrompt || "",
@@ -82,6 +96,7 @@ export const OpenAiDialog = ({
 	useEffect(() => {
 		if (open) {
 			form.reset({
+				credentialId: defaultValues.credentialId || "",
 				variableName: defaultValues.variableName || "",
 				model: defaultValues.model || OPENAI_MODELS[0].value,
 				systemPrompt: defaultValues.systemPrompt || "",
@@ -130,6 +145,42 @@ export const OpenAiDialog = ({
 						/>
 						<FormField
 							control={form.control}
+							name="credentialId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>OpenAI Credential</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										defaultValue={field.value}
+										disabled={isLoadingCredentials || credentials?.length === 0}
+									>
+										<FormControl>
+											<SelectTrigger className="w-full">
+												<SelectValue placeholder="Select a credential" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{credentials?.map((credential) => (
+												<SelectItem key={credential.id} value={credential.id}>
+													<div className="flex items-center gap-2">
+														<Image
+															src="/logos/openai.svg"
+															alt="OpenAI"
+															width={16}
+															height={16}
+														/>
+														{credential.name}
+													</div>
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
 							name="model"
 							render={({ field }) => (
 								<FormItem>
@@ -152,8 +203,7 @@ export const OpenAiDialog = ({
 										</SelectContent>
 									</Select>
 									<FormDescription>
-										The Google Gemini model you want to use. Gemini 2.5 models
-										are available in free tier.
+										The OpenAI model you want to use.
 									</FormDescription>
 									<FormMessage />
 								</FormItem>
