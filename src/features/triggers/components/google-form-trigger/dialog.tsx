@@ -39,7 +39,7 @@ export const GoogleFormTriggerDialog = ({ open, onOpenChange }: Props) => {
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent>
+			<DialogContent className="flex flex-col max-h-[90vh]">
 				<DialogHeader>
 					<DialogTitle>Google Form Trigger Configuration</DialogTitle>
 					<DialogDescription>
@@ -47,7 +47,7 @@ export const GoogleFormTriggerDialog = ({ open, onOpenChange }: Props) => {
 						this workflow when a form is submitted.
 					</DialogDescription>
 				</DialogHeader>
-				<div className="space-y-4">
+				<div className="scrollbar-thin space-y-4 overflow-y-auto flex-1 px-1 py-1">
 					<div className="space-y-2">
 						<Label htmlFor="webhook-url">Webhook URL</Label>
 						<div className="flex gap-2">

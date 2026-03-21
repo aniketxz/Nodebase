@@ -38,7 +38,7 @@ export const StripeTriggerDialog = ({ open, onOpenChange }: Props) => {
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent>
+			<DialogContent className="flex flex-col max-h-[90vh]">
 				<DialogHeader>
 					<DialogTitle>Stripe Trigger Configuration</DialogTitle>
 					<DialogDescription>
@@ -46,7 +46,7 @@ export const StripeTriggerDialog = ({ open, onOpenChange }: Props) => {
 						workflow on payment events.
 					</DialogDescription>
 				</DialogHeader>
-				<div className="space-y-4">
+				<div className="scrollbar-thin space-y-4 overflow-y-auto flex-1 px-1 py-1">
 					<div className="space-y-2">
 						<Label htmlFor="webhook-url">Webhook URL</Label>
 						<div className="flex gap-2">
