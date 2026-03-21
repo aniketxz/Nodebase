@@ -16,7 +16,7 @@ interface Props {
 export const ManualTriggerDialog = ({ open, onOpenChange }: Props) => {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent>
+			<DialogContent className="flex flex-col max-h-[90vh]">
 				<DialogHeader>
 					<DialogTitle>Manual Trigger</DialogTitle>
 					<DialogDescription>

@@ -93,7 +93,7 @@ export const HttpRequestDialog = ({
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent>
+			<DialogContent className="flex flex-col max-h-[90vh]">
 				<DialogHeader>
 					<DialogTitle>HTTP Request</DialogTitle>
 					<DialogDescription>
@@ -102,8 +102,9 @@ export const HttpRequestDialog = ({
 				</DialogHeader>
 				<Form {...form}>
 					<form
+						id="http-request-dialog-form"
 						onSubmit={form.handleSubmit(handleSubmit)}
-						className="space-y-8 mt-4"
+						className="scrollbar-thin space-y-8 overflow-y-auto flex-1 px-1 py-4"
 					>
 						<FormField
 							control={form.control}
@@ -207,10 +208,10 @@ export const HttpRequestDialog = ({
 							/>
 						)}
 
-						<DialogFooter className="mt-4">
-							<Button type="submit">Save</Button>
-						</DialogFooter>
 					</form>
+					<DialogFooter className="pt-4 border-t">
+						<Button type="submit" form="http-request-dialog-form">Save</Button>
+					</DialogFooter>
 				</Form>
 			</DialogContent>
 		</Dialog>
