@@ -55,7 +55,7 @@ const executionNodes: NodeTypeOption[] = [
 	{
 		type: NodeType.GEMINI,
 		label: "Gemini",
-		description: "Use Gemini to generate text",
+		description: "Uses Gemini to generate text",
 		icon: "/logos/gemini.svg",
 	},
 	{
@@ -69,6 +69,18 @@ const executionNodes: NodeTypeOption[] = [
 		label: "Anthropic",
 		description: "Uses Anthropic to generate text",
 		icon: "/logos/anthropic.svg",
+	},
+	{
+		type: NodeType.DISCORD,
+		label: "Discord",
+		description: "Sends a message to Discord",
+		icon: "/logos/discord.svg",
+	},
+	{
+		type: NodeType.SLACK,
+		label: "Slack",
+		description: "Sends a message to Slack",
+		icon: "/logos/slack.svg",
 	},
 ];
 
