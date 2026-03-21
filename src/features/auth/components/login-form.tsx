@@ -23,7 +23,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+import { authClient, signInUsingGithub, signInUsingGoogle } from "@/lib/auth-client";
 import Image from "next/image";
 
 const loginSchema = z.object({
@@ -58,7 +58,7 @@ export function LoginForm() {
 				onError: (ctx) => {
 					toast.error(ctx.error.message);
 				},
-			}
+			},
 		);
 	};
 
@@ -77,6 +77,7 @@ export function LoginForm() {
 							<div className="grid gap-6">
 								<div className="flex flex-col gap-4">
 									<Button
+										onClick={() => signInUsingGithub(router)}
 										variant="outline"
 										className="w-full"
 										type="button"
@@ -91,6 +92,7 @@ export function LoginForm() {
 										Continue with GitHub
 									</Button>
 									<Button
+										onClick={() => signInUsingGoogle(router)}
 										variant="outline"
 										className="w-full"
 										type="button"
