@@ -101,7 +101,7 @@ export const AppSidebar = () => {
 			</SidebarContent>
 			<SidebarFooter>
 				<SidebarMenu>
-					{!hasActiveSubscription && !isLoading && (
+					{/* {!hasActiveSubscription && !isLoading && (
 						<SidebarMenuItem>
 							<SidebarMenuButton
 								tooltip="Upgrade to Pro"
@@ -112,8 +112,8 @@ export const AppSidebar = () => {
 								<span>Upgrade to Pro</span>
 							</SidebarMenuButton>
 						</SidebarMenuItem>
-					)}
-					<SidebarMenuItem>
+					)} */}
+					{/* <SidebarMenuItem>
 						<SidebarMenuButton
 							tooltip="Billiing Portal"
 							className="gap-x-4 h-10 px-4"
@@ -122,7 +122,7 @@ export const AppSidebar = () => {
 							<CreditCardIcon className="h-4 w-4" />
 							<span>Billing Portal</span>
 						</SidebarMenuButton>
-					</SidebarMenuItem>
+					</SidebarMenuItem> */}
 					<SidebarMenuItem>
 						<SidebarMenuButton
 							tooltip="Sign out"

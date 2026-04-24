@@ -1,10 +1,9 @@
 import { createAuthClient } from "better-auth/react";
-import { polarClient } from "@polar-sh/better-auth";
 import { toast } from "sonner";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export const authClient = createAuthClient({
-	plugins: [polarClient()],
+	// plugins: [polarClient()],
 });
 
 const handleSocialSignIn = async (
